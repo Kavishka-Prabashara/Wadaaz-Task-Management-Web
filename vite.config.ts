@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-    base: '/Wadaaz-Task-Management-Web/', // Change this to the actual base path you need
+    base: '/wadaaz-task-management-web/', // Change this to the actual base path you need
     plugins: [
         tailwindcss(),
         react()
