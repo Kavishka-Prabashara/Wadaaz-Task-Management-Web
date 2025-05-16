@@ -20,7 +20,7 @@ const WorkPlace: React.FC = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await fetch('http://localhost:5000/tasks', {
+                const response = await fetch('https://wadaaz-backend-production.up.railway.app/tasks', {
                     headers: {
                         'Authorization': `Bearer ${authToken}`, // Authorization හෙඩරයට ටෝකනය යවන්න
                     },
@@ -53,7 +53,7 @@ const WorkPlace: React.FC = () => {
                 completed: false,
             };
             try {
-                const response = await fetch('http://localhost:5000/tasks', {
+                const response = await fetch('https://wadaaz-backend-production.up.railway.app/tasks', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const WorkPlace: React.FC = () => {
 
     const handleUpdateTask = async (id: string, updatedTaskData: Partial<Omit<Task, 'id'>>) => {
         try {
-            const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+            const response = await fetch(`https://wadaaz-backend-production.up.railway.app/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const WorkPlace: React.FC = () => {
 
     const handleDeleteTask = async (id: string) => {
         try {
-            const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+            const response = await fetch(`https://wadaaz-backend-production.up.railway.app/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${authToken}`, // Authorization හෙඩරයට ටෝකනය යවන්න
