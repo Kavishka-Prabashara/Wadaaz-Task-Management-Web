@@ -1,19 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom';
 import welcomeGif from './assets/react.svg';
-import { signInWithGoogle } from './firebase.ts';
+import { signInWithGoogle } from './firebase.ts'; // මෙතනින් auth ඉවත් කරන්න
 
 function Login() {
     const navigate = useNavigate();
 
     const handleGoogleSignIn = async () => {
         try {
-            await signInWithGoogle();
-            navigate('/taskworkface'); // or your dashboard route
+            const token = await signInWithGoogle();
+            localStorage.setItem('authToken', token); // ටෝකනය ලෝකල් ස්ටෝරේජ් එකේ සුරකින්න
+            navigate('/taskworkface');
         } catch (error) {
             console.error("Google Sign-in Error:", error);
             alert("Failed to sign in with Google. Please try again.");
         }
     };
+
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-light-blue font-sans">
