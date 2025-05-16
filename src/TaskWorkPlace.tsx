@@ -15,11 +15,16 @@ const WorkPlace: React.FC = () => {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskDescription, setNewTaskDescription] = useState('');
     const navigate = useNavigate();
+    const authToken = localStorage.getItem('authToken'); // ටෝකනය ලෝකල් ස්ටෝරේජ් එකෙන් ලබාගන්න
 
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await fetch('http://localhost:5000/tasks');
+                const response = await fetch('http://localhost:5000/tasks', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`, // Authorization හෙඩරයට ටෝකනය යවන්න
+                    },
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -31,13 +36,13 @@ const WorkPlace: React.FC = () => {
         };
 
         auth.onAuthStateChanged((user) => {
-            if (!user) {
+            if (!user && navigate) {
                 navigate('/login');
-            } else {
+            } else if (user && authToken) {
                 fetchTasks();
             }
         });
-    }, [navigate]);
+    }, [navigate, authToken]);
 
     const handleAddTask = async () => {
         if (newTaskTitle.trim()) {
@@ -52,6 +57,7 @@ const WorkPlace: React.FC = () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`, // Authorization හෙඩරයට ටෝකනය යවන්න
                     },
                     body: JSON.stringify(newTask),
                 });
@@ -74,6 +80,7 @@ const WorkPlace: React.FC = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`, // Authorization හෙඩරයට ටෝකනය යවන්න
                 },
                 body: JSON.stringify(updatedTaskData),
             });
@@ -91,6 +98,9 @@ const WorkPlace: React.FC = () => {
         try {
             const response = await fetch(`http://localhost:5000/tasks/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`, // Authorization හෙඩරයට ටෝකනය යවන්න
+                },
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -104,6 +114,7 @@ const WorkPlace: React.FC = () => {
     const handleLogout = async () => {
         try {
             await auth.signOut();
+            localStorage.removeItem('authToken'); // ලොග් අවුට් වූ විට ටෝකනය ඉවත් කරන්න
             navigate('/login');
         } catch (error) {
             console.error("Logout failed:", error);
